@@ -11,7 +11,6 @@ actor DKeeper {
 
   // variable: List. = type de données (List) qui doit contenir une liste de Note objects
   // avec valeur initiale à nil
-  // creation of an array of Note objects
   var notes: List.List<Note> = List.nil<Note>();
 
   public func createNote(titleText: Text, contentText: Text){
@@ -23,5 +22,9 @@ actor DKeeper {
 
     notes := List.push(newNote, notes);
     Debug.print(debug_show(notes));
-  }
+  };
+
+  public query func readNotes(): async [Note] {
+    return List.toArray(notes);
+  } 
 };
