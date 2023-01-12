@@ -11,7 +11,7 @@ actor DKeeper {
 
   // variable: List. = type de données (List) qui doit contenir une liste de Note objects
   // avec valeur initiale à nil
-  var notes: List.List<Note> = List.nil<Note>();
+  stable var notes: List.List<Note> = List.nil<Note>();
 
   public func createNote(titleText: Text, contentText: Text){
 
@@ -21,10 +21,19 @@ actor DKeeper {
     };
 
     notes := List.push(newNote, notes);
-    Debug.print(debug_show(notes));
+    // Debug.print(debug_show(notes));
   };
 
   public query func readNotes(): async [Note] {
+    // List in Motoko = (opt record {"D"; opt record {"C"; opt record {"B"; opt record {"A"; null}}}})
+    // --> convert it to an array to deal with it
     return List.toArray(notes);
-  } 
+  };
+
+  public func removeNote(id: Nat) {
+    let listFront = List.take(notes, id);
+    let listBack = List.drop(notes, id + 1);
+    notes := List.append(listFront, listBack);
+    // Debug.print(debug_show(notes));
+  };
 };
